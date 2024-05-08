@@ -1,0 +1,24 @@
+-- Drop old tables
+DROP TABLE zipcodes;
+
+-- Create table with partition and buckets
+CREATE TABLE zipcodes(RecordNumber int , Country string, City string, Zipcode string)
+PARTITIONED BY (state string)
+CLUSTERED BY (Zipcode) INTO 3 BUCKETS
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ',';
+
+-- lOAD DATA INTO THE TABLE
+LOAD DATA LOCAL INPATH 'root/zipcodes.csv' INTO TABLE zipcodes;
+
+-- print results to local filesystem
+INSERT OVERWRITE LOCAL DIRECTORY  '/root/HiveOutput'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+SELECT * FROM zipcodes WHERE state='PR' and zipcode=704;
+
+
+-- warehouse/zipcodes/state=PR/000000_0
+-- warehouse/zipcodes/state=AL/000000_0
+-- warehouse/zipcodes/state=NC/000000_0
+-- warehouse/zipcodes/state=FL/000000_0
+-- warehouse/zipcodes/state=/000000_0
+-- warehouse/zipcodes/state=PR/000000_0
