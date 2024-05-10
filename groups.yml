@@ -1,8 +1,0 @@
----
-- hosts: local
-  become: true
-  tasks: 
-    - name: create group
-      group:
-        name: Wheel
-        state: present
