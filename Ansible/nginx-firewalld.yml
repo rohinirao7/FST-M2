@@ -1,6 +1,7 @@
 --- 
 - name: set up webserver
-  hosts: local
+  hosts: server
+  become: true
   tasks: 
     - name: ensure nginx is at the latest version
       apt:
